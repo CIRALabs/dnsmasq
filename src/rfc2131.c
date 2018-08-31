@@ -769,7 +769,7 @@ size_t dhcp_reply(struct dhcp_context *context, char *iface_name, int int_index,
 	    }
 	}
     }
-  
+
   if (config)
     {
       struct dhcp_netid_list *list;
@@ -1370,6 +1370,15 @@ size_t dhcp_reply(struct dhcp_context *context, char *iface_name, int int_index,
 		      add_extradata_opt(lease, NULL);
 		    }
 
+		  if ((opt = option_find(mess, sz, OPTION_MUD_URL_V4, 1)))
+		  {
+			add_extradata_opt(lease, opt);
+		  }
+		  else
+		  {
+			add_extradata_opt(lease, NULL);
+		  }
+
 		  /* DNSMASQ_REQUESTED_OPTIONS */
 		  if ((opt = option_find(mess, sz, OPTION_REQUESTED_OPTIONS, 1)))
 		    {
@@ -1412,6 +1421,7 @@ size_t dhcp_reply(struct dhcp_context *context, char *iface_name, int int_index,
 			ucp++, len--;
 		      lease_add_extradata(lease, ucp, len, -1);
 		    }
+
 		}
 #endif
 	    }
